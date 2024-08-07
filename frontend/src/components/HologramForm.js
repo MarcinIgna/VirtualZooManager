@@ -1,51 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { fetchHolograms, createHologram, updateHologram } from '../api';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createHologram, updateHologram, fetchHologramById } from '../api'; // Importuj funkcje zamiast API_URL
 
-function HologramForm({ match }) {
+function HologramForm() {
   const [hologram, setHologram] = useState({ name: '', weight: '', superpower: '', extinct_since: '' });
-  const isEditing = !!match.params.id;
+  const [isEditing, setIsEditing] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (isEditing) {
-      fetchHolograms().then(data => {
-        const existingHologram = data.find(h => h.id === parseInt(match.params.id));
-        if (existingHologram) setHologram(existingHologram);
-      });
+    if (id) {
+      fetchHologramById(id)
+        .then(data => {
+          setHologram(data);
+          setIsEditing(true);
+        })
+        .catch(error => console.error('Error fetching hologram:', error));
     }
-  }, [isEditing, match.params.id]);
+  }, [id]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setHologram(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (isEditing) {
-      updateHologram(hologram.id, hologram);
+      updateHologram(id, hologram)
+        .then(() => navigate('/'))
+        .catch(error => console.error('Error updating hologram:', error));
     } else {
-      createHologram(hologram);
+      createHologram(hologram)
+        .then(() => navigate('/'))
+        .catch(error => console.error('Error creating hologram:', error));
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input type="text" name="name" value={hologram.name} onChange={handleChange} />
-      </label>
-      <label>
-        Weight:
-        <input type="number" name="weight" value={hologram.weight} onChange={handleChange} />
-      </label>
-      <label>
-        Superpower:
-        <input type="text" name="superpower" value={hologram.superpower} onChange={handleChange} />
-      </label>
-      <label>
-        Extinct Since:
-        <input type="text" name="extinct_since" value={hologram.extinct_since} onChange={handleChange} />
-      </label>
+      <input
+        type="text"
+        name="name"
+        value={hologram.name}
+        onChange={handleChange}
+        placeholder="Name"
+        required
+      />
+      <input
+        type="number"
+        name="weight"
+        value={hologram.weight}
+        onChange={handleChange}
+        placeholder="Weight"
+        required
+      />
+      <input
+        type="text"
+        name="superpower"
+        value={hologram.superpower}
+        onChange={handleChange}
+        placeholder="Superpower"
+        required
+      />
+      <input
+        type="text"
+        name="extinct_since"
+        value={hologram.extinct_since}
+        onChange={handleChange}
+        placeholder="Extinct Since"
+        required
+      />
       <button type="submit">{isEditing ? 'Update' : 'Add'} Hologram</button>
     </form>
   );

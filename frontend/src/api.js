@@ -1,33 +1,43 @@
-const API_URL = 'http://localhost:8000/api/holograms/';
+export const API_URL = 'http://localhost:8000/api/holograms/';
 
 export const fetchHolograms = async () => {
   const response = await fetch(API_URL);
-  return await response.json();
-};
+  if (!response.ok) {
+    throw new Error('Network response was not ok.');
+  }
+  return response.json();
+}
 
-export const fetchHologramById = async id => {
+export const fetchHologramById = async (id) => {
   const response = await fetch(`${API_URL}${id}/`);
-  return await response.json();
-};
+  if (!response.ok) {
+    throw new Error('Network response was not ok.');
+  }
+  return response.json();
+}
 
-export const createHologram = async hologram => {
-  const response = await fetch(API_URL, {
+export function createHologram(hologram) {
+  return fetch(API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(hologram)
-  });
-  return await response.json();
-};
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(hologram),
+  }).then(response => response.json());
+}
 
-export const updateHologram = async (id, hologram) => {
-  const response = await fetch(`${API_URL}${id}/`, {
+export function updateHologram(id, hologram) {
+  return fetch(`${API_URL}/${id}/`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(hologram)
-  });
-  return await response.json();
-};
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(hologram),
+  }).then(response => response.json());
+}
 
-export const deleteHologram = async id => {
-  await fetch(`${API_URL}${id}/`, { method: 'DELETE' });
-};
+export function deleteHologram(id) {
+  return fetch(`${API_URL}/${id}/`, {
+    method: 'DELETE',
+  }).then(response => response.status);
+}

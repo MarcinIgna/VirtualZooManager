@@ -1,26 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { fetchHologramById } from '../api';
 
-function HologramDetail() {
-  const [hologram, setHologram] = useState(null);
+const HologramDetail = () => {
   const { id } = useParams();
+  const [hologram, setHologram] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/holograms/${id}/`)
-      .then(response => response.json())
-      .then(data => setHologram(data));
+    const getHologram = async () => {
+      try {
+        const data = await fetchHologramById(id); // Używaj id bezpośrednio
+        setHologram(data);
+      } catch (err) {
+        setError('Error fetching data');
+      }
+    };
+
+    getHologram();
   }, [id]);
 
-  if (!hologram) return <p>Loading...</p>;
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!hologram) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
       <h1>{hologram.name}</h1>
-      <p>Waga: {hologram.weight} kg</p>
-      <p>Supermoc: {hologram.superpower}</p>
-      <p>Wyginęło od: {hologram.extinct_since}</p>
+      <p>Weight: {hologram.weight}</p>
+      <p>Superpower: {hologram.superpower}</p>
+      <p>Extinct Since: {hologram.extinct_since}</p>
     </div>
   );
-}
+};
 
 export default HologramDetail;
