@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from holograms.models.hologram_model import Hologram
@@ -8,8 +6,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
+
 @api_view(['GET', 'POST'])
 def hologram_list(request):
+    # List all holograms or create a new one
     if request.method == 'GET':
         holograms = Hologram.objects.all()
         serializer = HologramSerializer(holograms, many=True)
@@ -20,9 +20,11 @@ def hologram_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def hologram_detail(request, pk):
+    # Retrieve, update or delete a hologram
     hologram = get_object_or_404(Hologram, pk=pk)
     if request.method == 'GET':
         serializer = HologramSerializer(hologram)
