@@ -1,78 +1,117 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { createHologram, updateHologram, fetchHologramById } from '../api'; // Importuj funkcje zamiast API_URL
+import { useParams, useNavigate } from 'react-router-dom';
+import { createHologram, updateHologram, fetchHologramById, deleteHologram } from '../api';
+import { toast } from 'react-toastify';
 
 function HologramForm() {
-  const [hologram, setHologram] = useState({ name: '', weight: '', superpower: '', extinct_since: '' });
-  const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [hologram, setHologram] = useState({ name: '', weight: '', superpower: '', extinct_since: '' });
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (id) {
-      fetchHologramById(id)
-        .then(data => {
+      // Fetch existing hologram details for editing
+      const fetchHologram = async () => {
+        try {
+          const data = await fetchHologramById(id);
           setHologram(data);
           setIsEditing(true);
-        })
-        .catch(error => console.error('Error fetching hologram:', error));
+        } catch (error) {
+          console.error('Error fetching hologram:', error);
+          toast.error('Error fetching hologram details.');
+        }
+      };
+
+      fetchHologram();
     }
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setHologram(prevState => ({ ...prevState, [name]: value }));
+    setHologram({ ...hologram, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEditing) {
-      updateHologram(id, hologram)
-        .then(() => navigate('/'))
-        .catch(error => console.error('Error updating hologram:', error));
-    } else {
-      createHologram(hologram)
-        .then(() => navigate('/'))
-        .catch(error => console.error('Error creating hologram:', error));
+
+    try {
+      if (isEditing) {
+        await updateHologram(id, hologram);
+        toast.success('Hologram updated successfully!');
+      } else {
+        await createHologram(hologram);
+        toast.success('Hologram created successfully!');
+      }
+      navigate('/');
+    } catch (error) {
+      console.error('Error saving hologram:', error);
+      toast.error('Error saving hologram.');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this hologram?')) {
+      try {
+        await deleteHologram(id);
+        toast.success('Hologram deleted successfully!');
+        navigate('/');
+      } catch (error) {
+        console.error('Error deleting hologram:', error);
+        toast.error('Error deleting hologram.');
+      }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="name"
-        value={hologram.name}
-        onChange={handleChange}
-        placeholder="Name"
-        required
-      />
-      <input
-        type="number"
-        name="weight"
-        value={hologram.weight}
-        onChange={handleChange}
-        placeholder="Weight"
-        required
-      />
-      <input
-        type="text"
-        name="superpower"
-        value={hologram.superpower}
-        onChange={handleChange}
-        placeholder="Superpower"
-        required
-      />
-      <input
-        type="text"
-        name="extinct_since"
-        value={hologram.extinct_since}
-        onChange={handleChange}
-        placeholder="Extinct Since"
-        required
-      />
-      <button type="submit">{isEditing ? 'Update' : 'Add'} Hologram</button>
-    </form>
+    <div>
+      <h1>{isEditing ? 'Edit Hologram' : 'Add Hologram'}</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={hologram.name}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Weight:
+          <input
+            type="text"
+            name="weight"
+            value={hologram.weight}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Superpower:
+          <input
+            type="text"
+            name="superpower"
+            value={hologram.superpower}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Extinct Since:
+          <input
+            type="text"
+            name="extinct_since"
+            value={hologram.extinct_since}
+            onChange={handleChange}
+          />
+        </label>
+        <button type="submit">
+          {isEditing ? 'Update Hologram' : 'Create Hologram'}
+        </button>
+        {isEditing && (
+          <button type="button" onClick={handleDelete}>
+            Delete Hologram
+          </button>
+        )}
+      </form>
+    </div>
   );
 }
 

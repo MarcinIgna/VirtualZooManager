@@ -6,7 +6,7 @@ export const fetchHolograms = async () => {
     throw new Error('Network response was not ok.');
   }
   return response.json();
-}
+};
 
 export const fetchHologramById = async (id) => {
   const response = await fetch(`${API_URL}${id}/`);
@@ -14,30 +14,42 @@ export const fetchHologramById = async (id) => {
     throw new Error('Network response was not ok.');
   }
   return response.json();
-}
+};
 
-export function createHologram(hologram) {
-  return fetch(API_URL, {
+export const createHologram = async (hologram) => {
+  const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(hologram),
-  }).then(response => response.json());
-}
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok.');
+  }
+  return response.json();
+};
 
-export function updateHologram(id, hologram) {
-  return fetch(`${API_URL}/${id}/`, {
+export const updateHologram = async (id, hologram) => {
+  const response = await fetch(`${API_URL}${id}/`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(hologram),
-  }).then(response => response.json());
-}
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok.');
+  }
+  return response.json();
+};
 
-export function deleteHologram(id) {
-  return fetch(`${API_URL}/${id}/`, {
+export const deleteHologram = async (id) => {
+  const response = await fetch(`${API_URL}${id}/`, {
     method: 'DELETE',
-  }).then(response => response.status);
-}
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok.');
+  }
+  return response.status; // Zwraca kod statusu, np. 204 dla sukcesu
+};

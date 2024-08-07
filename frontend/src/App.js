@@ -1,20 +1,26 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HologramList from './components/HologramList'; // Poprawny import
-import HologramDetail from './components/HologramDetail'; // Poprawny import
-import HologramForm from './components/HologramForm'; // Dodaj, jeśli chcesz mieć formularz
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import HologramList from './components/HologramList';
+import HologramForm from './components/HologramForm';
+import HologramDetail from './components/HologramDetail';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HologramList />} />
-        <Route path="/holograms/:id" element={<HologramDetail />} />
-        <Route path="/edit/:id" element={<HologramForm />} /> {/* Dodaj, jeśli masz formularz edycji */}
-      </Routes>
+      <div>
+        <Routes>
+          <Route path="/" element={<HologramList />} />
+          <Route path="/holograms/new" element={<HologramForm />} />
+          <Route path="/holograms/:id/edit" element={<HologramForm />} />
+          <Route path="/holograms/:id" element={<HologramDetail />} />
+        </Routes>
+        <ToastContainer />
+      </div>
     </Router>
   );
 }
 
 export default App;
-
