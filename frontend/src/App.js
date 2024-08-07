@@ -1,16 +1,18 @@
-// src/App.js
 import React from 'react';
-import './App.css';
-import MyComponent from './components/MyComponent'; // Import nowego komponentu
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HologramList from './components/HologramList'; // Komponent wyświetlający listę hologramów
+import HologramDetail from './components/HologramDetail'; // Komponent wyświetlający szczegóły hologramu
+import HologramForm from './components/HologramForm'; // Komponent dodający nowy hologram
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Moja aplikacja React</h1>
-        <MyComponent /> {/* Użyj nowego komponentu */}
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HologramList />} />
+        <Route path="/holograms/:id" element={<HologramDetail />} />
+        <Route path="/add-hologram" element={<HologramForm />} />
+      </Routes>
+    </Router>
   );
 }
 
