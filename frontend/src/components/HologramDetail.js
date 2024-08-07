@@ -10,7 +10,7 @@ const HologramDetail = () => {
   useEffect(() => {
     const getHologram = async () => {
       try {
-        const data = await fetchHologramById(id); // Używaj id bezpośrednio
+        const data = await fetchHologramById(id);
         setHologram(data);
       } catch (err) {
         setError('Error fetching data');

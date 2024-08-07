@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchHolograms } from '../api';
 
 function HologramList() {
   const [holograms, setHolograms] = useState([]);
+  const [filter, setFilter] = useState('');
+  const [sortField, setSortField] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
-    const getHolograms = async () => {
+    const fetchData = async () => {
       try {
         const data = await fetchHolograms();
         setHolograms(data);
@@ -15,8 +18,28 @@ function HologramList() {
       }
     };
 
-    getHolograms();
+    fetchData();
   }, []);
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const handleSort = (field) => {
+    setSortField(field);
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
+
+  const filteredHolograms = holograms
+    .filter((hologram) =>
+      hologram.name.toLowerCase().includes(filter.toLowerCase()) ||
+      hologram.superpower.toLowerCase().includes(filter.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (a[sortField] < b[sortField]) return sortOrder === 'asc' ? -1 : 1;
+      if (a[sortField] > b[sortField]) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
 
   return (
     <div>
@@ -24,28 +47,31 @@ function HologramList() {
       <Link to="/holograms/new">
         <button>Add Hologram</button>
       </Link>
+      <input
+        type="text"
+        placeholder="Filter by name or superpower"
+        value={filter}
+        onChange={handleFilterChange}
+      />
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Weight</th>
-            <th>Superpower</th>
-            <th>Extinct Since</th>
+            <th onClick={() => handleSort('name')}>Name {sortField === 'name' ? (sortOrder === 'asc' ? '🔼' : '🔽') : ''}</th>
+            <th onClick={() => handleSort('weight')}>Weight {sortField === 'weight' ? (sortOrder === 'asc' ? '🔼' : '🔽') : ''}</th>
+            <th onClick={() => handleSort('superpower')}>Superpower {sortField === 'superpower' ? (sortOrder === 'asc' ? '🔼' : '🔽') : ''}</th>
+            <th onClick={() => handleSort('extinct_since')}>Extinct Since {sortField === 'extinct_since' ? (sortOrder === 'asc' ? '🔼' : '🔽') : ''}</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {holograms.map((hologram) => (
+          {filteredHolograms.map((hologram) => (
             <tr key={hologram.id}>
               <td>{hologram.name}</td>
               <td>{hologram.weight}</td>
               <td>{hologram.superpower}</td>
               <td>{hologram.extinct_since}</td>
               <td>
-                <Link to={`/holograms/${hologram.id}/edit`}>
-                  <button>Edit</button>
-                </Link>
-                {/* Dodaj inne akcje, takie jak "Delete" */}
+                <Link to={`/holograms/${hologram.id}/edit`}>Edit</Link>
               </td>
             </tr>
           ))}

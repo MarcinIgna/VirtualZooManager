@@ -78,10 +78,11 @@ function HologramForm() {
         <label>
           Weight:
           <input
-            type="text"
+            type="number"
             name="weight"
             value={hologram.weight}
             onChange={handleChange}
+            placeholder="e.g., 1000"
           />
         </label>
         <label>
@@ -100,6 +101,7 @@ function HologramForm() {
             name="extinct_since"
             value={hologram.extinct_since}
             onChange={handleChange}
+            placeholder="e.g., 6600 BCE"
           />
         </label>
         <button type="submit">

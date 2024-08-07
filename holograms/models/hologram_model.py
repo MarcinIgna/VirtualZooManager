@@ -10,7 +10,7 @@ def validate_weight(value):
 # Validation function for extinct_since
 def validate_extinct_since(value):
     # Regex pattern to match dates like "1000 BCE" or "500 CE"
-    if not re.match(r'^\d{1,4} (BCE|CE)$', value):
+    if not re.match(r'^\d{1,15} (BCE|CE)$', value):
         raise ValidationError('Extinct since must be in the format "YYYY BCE" or "YYYY CE".')
 
 # Hologram model definition
