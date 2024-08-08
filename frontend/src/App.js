@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import HologramList from './components/HologramList';
-import HologramForm from './components/HologramForm';
-import HologramDetail from './components/HologramDetail';
+import HologramList from './components/HologramList/HologramList';
+import HologramForm from './components/HologramForm/HologramForm';
+// import HologramDetail from './components/HologramDetail';
 
 function App() {
   return (
@@ -15,7 +15,6 @@ function App() {
           <Route path="/" element={<HologramList />} />
           <Route path="/holograms/new" element={<HologramForm />} />
           <Route path="/holograms/:id/edit" element={<HologramForm />} />
-          <Route path="/holograms/:id" element={<HologramDetail />} />
         </Routes>
         <ToastContainer />
       </div>

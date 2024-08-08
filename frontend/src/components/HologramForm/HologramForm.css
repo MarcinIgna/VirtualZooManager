@@ -1,0 +1,88 @@
+
+/* container */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+
+  }
+  
+  /* header */
+  .header {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  /* Formular */
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* labels and fields */
+  label {
+    margin-bottom: 10px;
+  }
+  
+  input {
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  input[type="number"] {
+    width: auto;
+    max-width: 200px; 
+  }
+  
+  /* button update */
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    width: auto;
+    max-width: 200px; 
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* button delete */
+  button.delete {
+    background-color: #dc3545;
+  }
+  
+  button.delete:hover {
+    background-color: #c82333;
+  }
+  
+  /* Przycisk powrotu */
+.back-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
+}
