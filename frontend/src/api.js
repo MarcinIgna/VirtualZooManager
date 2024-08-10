@@ -51,5 +51,5 @@ export const deleteHologram = async (id) => {
   if (!response.ok) {
     throw new Error('Network response was not ok.');
   }
-  return response.status; // Zwraca kod statusu, np. 204 dla sukcesu
+  return response.status; 
 };

@@ -39,7 +39,9 @@ function HologramList() {
   const filteredHolograms = holograms
     .filter((hologram) =>
       hologram.name.toLowerCase().includes(filter.toLowerCase()) ||
-      hologram.superpower.toLowerCase().includes(filter.toLowerCase())
+      hologram.superpower.toLowerCase().includes(filter.toLowerCase())||
+      hologram.extinct_since.toLowerCase().includes(filter.toLowerCase())||
+      hologram.weight.toString().toLowerCase().includes(filter.toLowerCase())
     )
     .sort((a, b) => {
       if (a[sortField] < b[sortField]) return sortOrder === 'asc' ? -1 : 1;
@@ -50,7 +52,7 @@ function HologramList() {
   return (
     <div className="container">
       {/* Heading for the hologram list page */}
-      <h1 className="header">Hologram List</h1>
+      <h1 className="header1">Hologram List</h1>
 
       {/* Link to navigate to the form for adding a new hologram */}
       <Link to="/holograms/new">
@@ -94,7 +96,7 @@ function HologramList() {
           {filteredHolograms.map((hologram) => (
             <tr key={hologram.id}>
               <td>{hologram.name}</td>
-              <td>{hologram.weight}</td>
+              <td>{hologram.weight + " kg"}</td>
               <td>{hologram.superpower}</td>
               <td>{hologram.extinct_since}</td>
               {/* Link to edit the hologram */}

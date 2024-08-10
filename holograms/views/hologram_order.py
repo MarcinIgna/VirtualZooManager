@@ -17,6 +17,6 @@ class HologramListView(generics.ListCreateAPIView):
         Retrieves and orders the queryset based on the 'ordering' parameter in the request.
         Defaults to ordering by 'name'.
         """
-        queryset = Hologram.objects.all()  # Fetch all hologram records
-        ordering = self.request.GET.get('ordering', 'name')  # Get the 'ordering' parameter from the request, default to 'name'
-        return queryset.order_by(ordering)  # Return the queryset ordered by the specified field
+        queryset = Hologram.objects.all()
+        ordering = self.request.GET.get('ordering', 'name') 
+        return queryset.order_by(ordering)
