@@ -22,3 +22,18 @@ class Hologram(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_extinct_since_as_number(self):
+        """
+        Convert the 'extinct_since' date to a numeric value for sorting and comparisons.
+        BCE dates are negative, CE dates are positive.
+        """
+        match = re.match(r'^(\d{1,15}) (BCE|CE)$', self.extinct_since)
+        if match:
+            year = int(match.group(1))
+            era = match.group(2)
+            return -year if era == 'BCE' else year
+        raise ValidationError('Invalid date format for extinct_since.')
+
+    class Meta:
+        ordering = ['name']

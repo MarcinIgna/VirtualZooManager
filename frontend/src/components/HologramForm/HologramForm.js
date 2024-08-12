@@ -31,11 +31,33 @@ function HologramForm() {
     }
   }, [id]);
 
-  // Handle changes to form fields
-  const handleChange = (e) => {
-    setHologram({ ...hologram, [e.target.name]: e.target.value });
+  // Handle capitalization of the first word
+  const capitalizeFirstWord = (text) => {
+    return text
+      .replace(/^[a-z]/, char => char.toUpperCase()) // Capitalize only the first letter of the text
+      .replace(/[^a-zA-Z\s]/g, ''); // Remove non-alphabetic characters except spaces
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+  
+    let processedValue = value;
+  
+    // Adjust processing based on the field
+    if (name === 'name' || name === 'superpower') {
+      // Capitalize the first letter for text fields
+      processedValue = capitalizeFirstWord(value);
+    } else if (name === 'weight') {
+      // Process 'weight' field as a number, removing unwanted characters
+      // Allow only digits, do not allow 'e', 'E', or other characters
+      processedValue = value.replace(/[^0-9]/g, '');
+    } else if (name === 'extinct_since') {
+      // Allow a mix of text and numbers, add validation if needed
+    }
+  
+    setHologram({ ...hologram, [name]: processedValue });
+  };
+  
   // Handle form submission for creating or updating holograms
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,7 +116,7 @@ function HologramForm() {
         <label>
           Weight:
           <input
-            type="number"
+            type="text"  
             name="weight"
             value={hologram.weight}
             onChange={handleChange}
