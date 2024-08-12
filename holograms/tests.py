@@ -12,7 +12,7 @@ class HologramListViewTests(APITestCase):
             name='Unicorn',
             weight=500,
             superpower='Magic',
-            extinct_since='aaaaa'
+            extinct_since='1800 CE'
         )
         self.hologram2 = Hologram.objects.create(
             name='Dragon',

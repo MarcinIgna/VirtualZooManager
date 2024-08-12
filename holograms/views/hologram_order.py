@@ -3,14 +3,14 @@ from rest_framework import filters
 from ..models.hologram_model import Hologram
 from ..serializers.hologram_serializer import HologramSerializer
 
-# Class-based view for sorting and filtering holograms
+# Class-based view for sorting
 class HologramListView(generics.ListCreateAPIView):
     serializer_class = HologramSerializer  # Defines which serializer to use for this view
 
     # Configures the filter backends and fields available for sorting
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['name', 'weight', 'superpower', 'extinct_since']
-    ordering = ['name']  # Default ordering field
+    ordering = ['name'] 
 
     def get_queryset(self):
         """
